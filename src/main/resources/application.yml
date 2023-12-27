@@ -1,0 +1,32 @@
+server:
+  port: 8080
+  
+spring:
+  application:
+    name: vehicle-service
+  datasource:
+    url: jdbc:h2:mem:iotdb
+    driverClassName: org.h2.Driver
+#    username: sa
+#    password: password
+  jpa:
+    defer-datasource-initialization: true
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+  config:
+    import: optional:configserver:http://localhost:8888
+
+alert-configuration:
+    speed-limit: 90
+
+custom:
+  page-size: "30"
+  telemetry-scheduler:
+    enabled: false
+    initial-delay: 5000
+    fixed-delay: 5000
+    cron: "0 30 18 * * *"
+    time-interval-in-seconds: 86400
