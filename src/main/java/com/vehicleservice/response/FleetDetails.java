@@ -3,8 +3,8 @@ package com.vehicleservice.response;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.vehicleservice.entity.Fleet;
-import com.vehicleservice.entity.Vehicle;
+import com.vehicleservice.entity.vehicleDriver.Fleet;
+import com.vehicleservice.entity.vehicleDriver.Vehicle;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

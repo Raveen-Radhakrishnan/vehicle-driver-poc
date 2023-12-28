@@ -1,4 +1,4 @@
-package com.vehicleservice.service;
+package com.vehicleservice.service.vehicleDriver;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,12 +15,12 @@ import org.springframework.stereotype.Service;
 import com.vehicleservice.constants.DriverStatus;
 import com.vehicleservice.constants.VehicleEnum;
 import com.vehicleservice.constants.VehicleStatus;
-import com.vehicleservice.entity.Driver;
-import com.vehicleservice.entity.Vehicle;
+import com.vehicleservice.entity.vehicleDriver.Driver;
+import com.vehicleservice.entity.vehicleDriver.Vehicle;
 import com.vehicleservice.exception.DriverNotFoundException;
 import com.vehicleservice.exception.ErrorCode;
 import com.vehicleservice.exception.GeneralizedException;
-import com.vehicleservice.repository.DriverRepository;
+import com.vehicleservice.repository.vehicleDriver.DriverRepository;
 import com.vehicleservice.request.DriverMassUpdateRequest;
 import com.vehicleservice.request.DriverRequest;
 import com.vehicleservice.response.DriverResponse;

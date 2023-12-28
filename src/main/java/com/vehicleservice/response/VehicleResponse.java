@@ -2,7 +2,7 @@ package com.vehicleservice.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vehicleservice.constants.VehicleStatus;
-import com.vehicleservice.entity.Vehicle;
+import com.vehicleservice.entity.vehicleDriver.Vehicle;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

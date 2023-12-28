@@ -19,15 +19,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vehicleservice.constants.VehicleEnum;
-import com.vehicleservice.entity.CentralConfigs;
-import com.vehicleservice.entity.Driver;
-import com.vehicleservice.entity.Telemetry;
-import com.vehicleservice.entity.Vehicle;
+import com.vehicleservice.entity.vehicleDriver.CentralConfigs;
+import com.vehicleservice.entity.vehicleDriver.Driver;
+import com.vehicleservice.entity.vehicleDriver.Telemetry;
+import com.vehicleservice.entity.vehicleDriver.Vehicle;
 import com.vehicleservice.props.TelemetryProps;
-import com.vehicleservice.repository.CentralConfigRepository;
-import com.vehicleservice.repository.DriverRepository;
-import com.vehicleservice.repository.TelemetryRepository;
-import com.vehicleservice.repository.VehicleRepository;
+import com.vehicleservice.repository.vehicleDriver.CentralConfigRepository;
+import com.vehicleservice.repository.vehicleDriver.DriverRepository;
+import com.vehicleservice.repository.vehicleDriver.TelemetryRepository;
+import com.vehicleservice.repository.vehicleDriver.VehicleRepository;
 
 import jakarta.annotation.PostConstruct;
 

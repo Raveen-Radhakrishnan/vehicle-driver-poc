@@ -1,4 +1,4 @@
-package com.vehicleservice.entity;
+package com.vehicleservice.entity.vehicleDriver;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vehicleservice.auditing.Auditable;

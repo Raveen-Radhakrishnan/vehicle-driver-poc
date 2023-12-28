@@ -1,4 +1,4 @@
-package com.vehicleservice.repository;
+package com.vehicleservice.repository.vehicleDriver;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.vehicleservice.entity.Vehicle;
+import com.vehicleservice.entity.vehicleDriver.Vehicle;
 
 @Repository
 public interface VehicleRepository extends JpaRepository<Vehicle, Integer>{

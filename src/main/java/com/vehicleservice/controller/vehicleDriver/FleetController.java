@@ -1,4 +1,4 @@
-package com.vehicleservice.controller;
+package com.vehicleservice.controller.vehicleDriver;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vehicleservice.entity.Fleet;
+import com.vehicleservice.entity.vehicleDriver.Fleet;
 import com.vehicleservice.exception.ErrorCode;
 import com.vehicleservice.exception.GeneralizedException;
-import com.vehicleservice.service.FleetService;
+import com.vehicleservice.service.vehicleDriver.FleetService;
 
 import jakarta.validation.Valid;
 

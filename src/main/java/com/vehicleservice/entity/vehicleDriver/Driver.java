@@ -1,4 +1,4 @@
-package com.vehicleservice.entity;
+package com.vehicleservice.entity.vehicleDriver;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;

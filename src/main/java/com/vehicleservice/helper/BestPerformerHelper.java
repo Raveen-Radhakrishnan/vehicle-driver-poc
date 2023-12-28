@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.vehicleservice.constants.VehicleEnum;
-import com.vehicleservice.entity.Telemetry;
+import com.vehicleservice.entity.vehicleDriver.Telemetry;
 
 public class BestPerformerHelper {
 	

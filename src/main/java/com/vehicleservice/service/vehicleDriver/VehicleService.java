@@ -1,4 +1,4 @@
-package com.vehicleservice.service;
+package com.vehicleservice.service.vehicleDriver;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,13 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vehicleservice.constants.VehicleEnum;
 import com.vehicleservice.constants.VehicleStatus;
-import com.vehicleservice.entity.Fleet;
-import com.vehicleservice.entity.Vehicle;
+import com.vehicleservice.entity.vehicleDriver.Fleet;
+import com.vehicleservice.entity.vehicleDriver.Vehicle;
 import com.vehicleservice.exception.ErrorCode;
 import com.vehicleservice.exception.GeneralizedException;
 import com.vehicleservice.exception.VehicleNotFoundException;
-import com.vehicleservice.repository.FleetRepository;
-import com.vehicleservice.repository.VehicleRepository;
+import com.vehicleservice.repository.vehicleDriver.FleetRepository;
+import com.vehicleservice.repository.vehicleDriver.VehicleRepository;
 import com.vehicleservice.request.VehicleMassUpdateRequest;
 import com.vehicleservice.request.VehicleRequest;
 import com.vehicleservice.response.Pagination;

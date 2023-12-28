@@ -1,4 +1,4 @@
-package com.vehicleservice.service;
+package com.vehicleservice.service.vehicleDriver;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.vehicleservice.entity.Fleet;
-import com.vehicleservice.entity.Vehicle;
-import com.vehicleservice.repository.FleetRepository;
-import com.vehicleservice.repository.VehicleRepository;
+import com.vehicleservice.entity.vehicleDriver.Fleet;
+import com.vehicleservice.entity.vehicleDriver.Vehicle;
+import com.vehicleservice.repository.vehicleDriver.FleetRepository;
+import com.vehicleservice.repository.vehicleDriver.VehicleRepository;
 
 import jakarta.validation.Valid;
 

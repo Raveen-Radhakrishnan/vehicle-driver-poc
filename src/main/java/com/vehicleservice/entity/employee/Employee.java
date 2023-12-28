@@ -1,13 +1,13 @@
-package com.vehicleservice.entity;
+package com.vehicleservice.entity.employee;
 
-import jakarta.persistence.Column;
+import com.vehicleservice.auditing.Auditable;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,16 +15,15 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "central_configs")
-public class CentralConfigs {
+@Table(name = "employee")
+public class Employee extends Auditable<String>{
 	
 	@Id
-	@Column(name = "CONFIG_KEY")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private String configKey;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	
-	@Column(name = "CONFIG_VALUE")
-	private String configValue;
+	private String name;
 
+	private String city;
 	
 }

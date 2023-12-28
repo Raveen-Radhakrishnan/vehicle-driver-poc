@@ -1,4 +1,4 @@
-package com.vehicleservice.service;
+package com.vehicleservice.service.vehicleDriver;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -21,14 +21,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.vehicleservice.constants.VehicleEnum;
-import com.vehicleservice.entity.Driver;
-import com.vehicleservice.entity.Telemetry;
+import com.vehicleservice.entity.vehicleDriver.Driver;
+import com.vehicleservice.entity.vehicleDriver.Telemetry;
 import com.vehicleservice.exception.ErrorCode;
 import com.vehicleservice.exception.GeneralizedException;
 import com.vehicleservice.helper.BestPerformerHelper;
-import com.vehicleservice.repository.DriverRepository;
-import com.vehicleservice.repository.TelemetryRepository;
-import com.vehicleservice.repository.VehicleRepository;
+import com.vehicleservice.repository.vehicleDriver.DriverRepository;
+import com.vehicleservice.repository.vehicleDriver.TelemetryRepository;
+import com.vehicleservice.repository.vehicleDriver.VehicleRepository;
 import com.vehicleservice.response.BestPerformerResponse;
 import com.vehicleservice.response.DriverResponse;
 import com.vehicleservice.response.DriverScoreResponse;

@@ -1,4 +1,4 @@
-package com.vehicleservice.controller;
+package com.vehicleservice.controller.vehicleDriver;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vehicleservice.entity.Driver;
+import com.vehicleservice.entity.vehicleDriver.Driver;
 import com.vehicleservice.exception.DriverNotFoundException;
 import com.vehicleservice.exception.ErrorCode;
 import com.vehicleservice.exception.GeneralizedException;
@@ -24,7 +24,7 @@ import com.vehicleservice.request.DriverRequest;
 import com.vehicleservice.request.VehicleMassUpdateRequest;
 import com.vehicleservice.response.DriverResponse;
 import com.vehicleservice.response.VehicleResponse;
-import com.vehicleservice.service.DriverService;
+import com.vehicleservice.service.vehicleDriver.DriverService;
 
 import jakarta.validation.Valid;
 

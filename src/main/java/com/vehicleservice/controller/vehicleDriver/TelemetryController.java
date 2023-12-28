@@ -1,4 +1,4 @@
-package com.vehicleservice.controller;
+package com.vehicleservice.controller.vehicleDriver;
 
 import java.util.List;
 
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vehicleservice.entity.Telemetry;
+import com.vehicleservice.entity.vehicleDriver.Telemetry;
 import com.vehicleservice.response.BestPerformerResponse;
 import com.vehicleservice.response.DriverScoreResponse;
 import com.vehicleservice.response.TelemetryResponseList;
-import com.vehicleservice.service.TelemetryService;
+import com.vehicleservice.service.vehicleDriver.TelemetryService;
 
 import jakarta.validation.Valid;
 

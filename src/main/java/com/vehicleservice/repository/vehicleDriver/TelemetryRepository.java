@@ -1,4 +1,4 @@
-package com.vehicleservice.repository;
+package com.vehicleservice.repository.vehicleDriver;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.vehicleservice.entity.Driver;
-import com.vehicleservice.entity.Telemetry;
+import com.vehicleservice.entity.vehicleDriver.Driver;
+import com.vehicleservice.entity.vehicleDriver.Telemetry;
 
 @Repository
 public interface TelemetryRepository extends JpaRepository<Telemetry, Integer>{

@@ -1,7 +1,7 @@
 package com.vehicleservice.response;
 
 import com.vehicleservice.constants.DriverStatus;
-import com.vehicleservice.entity.Driver;
+import com.vehicleservice.entity.vehicleDriver.Driver;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

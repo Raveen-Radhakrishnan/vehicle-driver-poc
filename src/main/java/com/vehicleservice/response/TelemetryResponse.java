@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 import org.springframework.format.datetime.standard.DateTimeFormatterFactory;
 
-import com.vehicleservice.entity.Telemetry;
+import com.vehicleservice.entity.vehicleDriver.Telemetry;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
