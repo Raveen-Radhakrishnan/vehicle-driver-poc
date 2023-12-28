@@ -1,6 +1,7 @@
 package com.vehicleservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.vehicleservice.auditing.Auditable;
 import com.vehicleservice.constants.VehicleStatus;
 
 import jakarta.persistence.Column;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "vehicle")
-public class Vehicle {
+public class Vehicle extends Auditable<String> {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
