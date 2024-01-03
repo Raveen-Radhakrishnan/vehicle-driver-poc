@@ -10,7 +10,8 @@ public enum ErrorCode {
 	BEST_PERFORMER_NOT_AVAILABLE(1005, "Best Performer not available for this time range"),
 	TELEMETRY_RECORDS_NOT_FOUND(1006, "Telemetry records not found for this time range"),
 	FLEET_NOT_FOUND(1007, "Fleet with given route not found"),
-	INVALID_REQUEST(1008, "Invalid or missing request parameter");
+	INVALID_REQUEST(1008, "Invalid or missing request parameter"),
+	EMPLOYEE_NOT_FOUND(1009, "Employee with given employee ID not found");
 	
 	ErrorCode(int value, String reasonPhrase) {
 		this.value = value;
