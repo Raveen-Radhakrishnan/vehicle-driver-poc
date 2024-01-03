@@ -26,18 +26,20 @@ spring:
       enabled: true
   
 #  Datasource 1
-  datasource:
-    jdbcUrl: jdbc:h2:mem:iotdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: 
+#  datasource:
+#    jdbcUrl: jdbc:h2:mem:iotdb
+#    driver-class-name: org.h2.Driver
+#    username: sa
+##    password: ENC(pnXZw3sMSM9vzRzUj/y7Ng==)
+#    password: 
 
 #  Datasource 2
-  second-datasource:
-    jdbcUrl: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: 
+#  second-datasource:
+#    jdbcUrl: jdbc:h2:mem:testdb
+#    driver-class-name: org.h2.Driver
+#    username: sa
+##    password: ENC(Q8xjbGa5gyBsxIiXKhzuxw==)
+#    password: 
 
 hibernate:
   hbm2ddl:
@@ -54,3 +56,22 @@ custom:
     fixed-delay: 5000
     cron: "0 30 18 * * *"
     time-interval-in-seconds: 86400
+  
+  vehicle:
+    jdbcUrl: jdbc:h2:mem:iotdb
+    driverClassName: org.h2.Driver
+    username: sa
+#    password: ENC(pnXZw3sMSM9vzRzUj/y7Ng==)
+    password: 
+    
+  employee:
+    jdbcUrl: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+#    password: ENC(Q8xjbGa5gyBsxIiXKhzuxw==)
+    password: 
+
+jasypt:
+  encryptor:
+    password: secret
+#    bean: jasyptStringEncryptor
