@@ -27,8 +27,8 @@ public interface TelemetryRepository extends JpaRepository<Telemetry, Integer>{
 //
 //	List<Telemetry> findByDriverIdAndTimeBetween(@Param("driver_id") Integer driverId, LocalDateTime startTime, LocalDateTime endTime);
 
-	List<Telemetry> findByDriverAndParameterAndTimeBetween(@Param("driver_id") Driver driver, String parameter, LocalDateTime startTime, LocalDateTime endTime);
+	List<Telemetry> findByDriverAndParameterAndTimeBetween(Driver driver, String parameter, LocalDateTime startTime, LocalDateTime endTime);
 	
-	List<Telemetry> findByDriverAndTimeBetween(@Param("driver_id") Driver driver, LocalDateTime startTime, LocalDateTime endTime);
+	List<Telemetry> findByDriverAndTimeBetween(Driver driver, LocalDateTime startTime, LocalDateTime endTime);
 	
 }

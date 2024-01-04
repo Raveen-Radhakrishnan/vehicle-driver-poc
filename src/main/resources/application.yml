@@ -58,14 +58,16 @@ custom:
     time-interval-in-seconds: 86400
   
   vehicle:
-    jdbcUrl: jdbc:h2:mem:iotdb
+    jdbcUrl: jdbc:h2:~/iotdb
+#    jdbcUrl: jdbc:h2:mem:iotdb
     driverClassName: org.h2.Driver
     username: sa
-#    password: ENC(pnXZw3sMSM9vzRzUj/y7Ng==)
-    password: 
+    password: ENC(pnXZw3sMSM9vzRzUj/y7Ng==)
+#    password: 
     
   employee:
-    jdbcUrl: jdbc:h2:mem:testdb
+    jdbcUrl: jdbc:h2:~/testdb
+#    jdbcUrl: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
     username: sa
 #    password: ENC(Q8xjbGa5gyBsxIiXKhzuxw==)

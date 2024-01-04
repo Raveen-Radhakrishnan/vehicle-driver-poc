@@ -10,6 +10,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -29,6 +30,7 @@ import com.vehicleservice.auditing.AuditorAwareImpl;
 						entityManagerFactoryRef = "employeeEntityManager",
 						transactionManagerRef = "employeeTransactionManager")
 //@EnableEncryptableProperties
+//@Order(3)
 public class EmployeeDatasourceConfig {
 
 	@Autowired
@@ -45,23 +47,7 @@ public class EmployeeDatasourceConfig {
 //		return DataSourceBuilder.create().build();
 //	}
 
-	@Bean
-	DataSource employeeDataSource() {
-		
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//		dataSource.setDriverClassName(env.getProperty("spring.second-datasource.driver-class-name"));
-//		dataSource.setUrl(env.getProperty("spring.second-datasource.jdbcUrl"));
-//		dataSource.setUsername(env.getProperty("spring.second-datasource.username"));
-//		dataSource.setPassword(env.getProperty("spring.second-datasource.password"));
-		
-		dataSource.setDriverClassName(env.getProperty("custom.employee.driverClassName"));
-		dataSource.setUrl(env.getProperty("custom.employee.jdbcUrl"));
-		dataSource.setUsername(env.getProperty("custom.employee.username"));
-		dataSource.setPassword(env.getProperty("custom.employee.password"));
-
-		return dataSource;
-		
-	}
+	
 
 	@Bean
 	LocalContainerEntityManagerFactoryBean employeeEntityManager() {
@@ -81,6 +67,24 @@ public class EmployeeDatasourceConfig {
 		em.setJpaPropertyMap(properties);
 
 		return em;
+	}
+	
+	@Bean
+	DataSource employeeDataSource() {
+		
+		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+//		dataSource.setDriverClassName(env.getProperty("spring.second-datasource.driver-class-name"));
+//		dataSource.setUrl(env.getProperty("spring.second-datasource.jdbcUrl"));
+//		dataSource.setUsername(env.getProperty("spring.second-datasource.username"));
+//		dataSource.setPassword(env.getProperty("spring.second-datasource.password"));
+		
+		dataSource.setDriverClassName(env.getProperty("custom.employee.driverClassName"));
+		dataSource.setUrl(env.getProperty("custom.employee.jdbcUrl"));
+		dataSource.setUsername(env.getProperty("custom.employee.username"));
+		dataSource.setPassword(env.getProperty("custom.employee.password"));
+
+		return dataSource;
+		
 	}
 
 	@Bean
