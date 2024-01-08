@@ -39,6 +39,15 @@ public class VehicleEnum {
 	public static final String[] TEN_POINT_FIELDS = {"fast_acceleration", "ac_misusage", "heavy_braking"};
 	
 	public static final String TELEMETRY_TIMESTAMP = "TELEMETRY_TIMESTAMP";
+
+	public static final String CREATE = "CREATE";
+	public static final String UPDATE = "UPDATE";
+	public static final String DELETE = "DELETE";
+
+	public static final String EXCEL_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+	public static final String EXCEL_SHEET_NAME = "custom.excel-upload-config.vehicle-sheet-name";
+	
 	
 	
 }

@@ -54,3 +54,5 @@ custom:
     fixed-delay: 5000
     cron: "0 30 18 * * *"
     time-interval-in-seconds: 86400
+  excel-upload-config:
+    vehicle-sheet-name: "VehicleList"
