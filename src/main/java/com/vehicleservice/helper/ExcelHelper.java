@@ -15,6 +15,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +23,8 @@ import com.vehicleservice.constants.VehicleEnum;
 import com.vehicleservice.constants.VehicleStatus;
 import com.vehicleservice.entity.vehicleDriver.Fleet;
 import com.vehicleservice.entity.vehicleDriver.Vehicle;
+import com.vehicleservice.exception.ErrorCode;
+import com.vehicleservice.exception.GeneralizedException;
 
 @Component
 public class ExcelHelper {
@@ -143,8 +146,11 @@ public class ExcelHelper {
 			workbook.close();
 
 			return actionVehicleMap;
-		} catch (IOException e) {
-			throw new RuntimeException("Failed to parse Excel file: " + e.getMessage());
+		} catch (Exception e) {
+//			throw new RuntimeException("Failed to parse Excel file: " + e.getMessage());
+			
+			throw new GeneralizedException(e.getMessage(),
+					ErrorCode.FILE_DATA_PROCESSING_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
