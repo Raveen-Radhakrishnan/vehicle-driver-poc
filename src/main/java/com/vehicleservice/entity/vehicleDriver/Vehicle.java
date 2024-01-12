@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vehicleservice.auditing.Auditable;
 import com.vehicleservice.constants.VehicleStatus;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,11 +14,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "vehicle")
@@ -28,7 +31,7 @@ public class Vehicle extends Auditable<String> {
 	private int id;
 	
 //	@ManyToOne(cascade = CascadeType.PERSIST)
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "fleet_id")
 	@JsonIgnoreProperties("vehicles")
 	private Fleet fleet;

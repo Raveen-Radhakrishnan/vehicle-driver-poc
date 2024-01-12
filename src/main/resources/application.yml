@@ -56,3 +56,8 @@ custom:
     time-interval-in-seconds: 86400
   excel-upload-config:
     vehicle-sheet-name: "VehicleList"
+  excel-download-config:
+    vehicle-sheet-name: "VehicleList"
+    file-name: "VehicleData"
+    vehicle-column-list: "ACTION,ID,MODEL,REGISTRATION_NUMBER,STATUS,STYLE,ROUTE"
+    

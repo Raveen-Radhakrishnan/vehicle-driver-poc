@@ -51,7 +51,7 @@ public class ExcelHelper {
 		try {
 			Workbook workbook = new XSSFWorkbook(multipartFile.getInputStream());
 
-			Sheet sheet = workbook.getSheet(environment.getProperty(VehicleEnum.EXCEL_SHEET_NAME));
+			Sheet sheet = workbook.getSheet(environment.getProperty(VehicleEnum.EXCEL_SHEET_NAME_UPLOAD));
 			Iterator<Row> rows = sheet.iterator();
 
 			List<Vehicle> vehicles = new ArrayList<Vehicle>();

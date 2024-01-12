@@ -1,5 +1,6 @@
 package com.vehicleservice.controller.vehicleDriver;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import com.vehicleservice.request.VehicleRequest;
 import com.vehicleservice.response.VehicleResponse;
 import com.vehicleservice.service.vehicleDriver.VehicleService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RestController
@@ -117,6 +119,13 @@ public class VehicleController {
 		}
 		
 		return new ResponseEntity<>(vehicleService.processVehiclesUsingFile(file), HttpStatus.CREATED);
+		
+	}
+
+	@GetMapping("/vehicles/download")
+	public void downloadVehicleData(HttpServletResponse response) throws IOException {
+		
+		vehicleService.downloadVehicleData(response);
 		
 	}
 

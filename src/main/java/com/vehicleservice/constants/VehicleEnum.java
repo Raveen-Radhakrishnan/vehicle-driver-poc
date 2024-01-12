@@ -46,8 +46,13 @@ public class VehicleEnum {
 
 	public static final String EXCEL_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-	public static final String EXCEL_SHEET_NAME = "custom.excel-upload-config.vehicle-sheet-name";
+	public static final String EXCEL_SHEET_NAME_UPLOAD = "custom.excel-upload-config.vehicle-sheet-name";
 	
+	//Excel Export
+	public static final String VEHICLE_EXCEL_COLUMN_DOWNLOAD = "custom.excel-download-config.vehicle-column-list";
+
+	public static final String VEHICLE_EXCEL_SHEET_NAME = "custom.excel-download-config.vehicle-sheet-name";
 	
+	public static final String VEHICLE_EXCEL_FILE_NAME = "custom.excel-download-config.file-name";
 	
 }
