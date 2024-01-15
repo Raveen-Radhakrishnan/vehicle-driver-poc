@@ -1,5 +1,6 @@
 package com.vehicleservice.controller.vehicleDriver;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +14,19 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.vehicleservice.entity.vehicleDriver.Vehicle;
 import com.vehicleservice.exception.ErrorCode;
 import com.vehicleservice.exception.GeneralizedException;
 import com.vehicleservice.exception.VehicleNotFoundException;
+import com.vehicleservice.helper.ExcelHelper;
 import com.vehicleservice.request.VehicleMassUpdateRequest;
 import com.vehicleservice.request.VehicleRequest;
 import com.vehicleservice.response.VehicleResponse;
 import com.vehicleservice.service.vehicleDriver.VehicleService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RestController
@@ -30,6 +34,9 @@ public class VehicleController {
 	
 	@Autowired
 	VehicleService vehicleService;
+
+	@Autowired
+	ExcelHelper excelHelper;
 	
 	@PostMapping("/vehicles")
 	public ResponseEntity<VehicleResponse> addVehicle(@RequestBody @Valid VehicleRequest vehicleRequest) {
@@ -99,6 +106,26 @@ public class VehicleController {
 		}
 		
 		return new ResponseEntity<>(vehicleService.massUpdateVehicle(vehicleMassUpdateRequest), HttpStatus.OK);
+		
+	}
+	
+	@PostMapping("/vehicles/upload")
+	public ResponseEntity<Object> processVehiclesUsingFile(@RequestParam("file") MultipartFile file) {
+		
+		if(file == null || !excelHelper.hasExcelFormat(file)) {
+			
+			throw new GeneralizedException("Please upload an excel file",
+					ErrorCode.INVALID_REQUEST, HttpStatus.BAD_REQUEST);
+		}
+		
+		return new ResponseEntity<>(vehicleService.processVehiclesUsingFile(file), HttpStatus.CREATED);
+		
+	}
+
+	@GetMapping("/vehicles/download")
+	public void downloadVehicleData(HttpServletResponse response) throws IOException {
+		
+		vehicleService.downloadVehicleData(response);
 		
 	}
 

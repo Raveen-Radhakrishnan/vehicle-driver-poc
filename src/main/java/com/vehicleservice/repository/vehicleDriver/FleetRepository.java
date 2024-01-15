@@ -1,5 +1,6 @@
 package com.vehicleservice.repository.vehicleDriver;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +13,7 @@ import com.vehicleservice.entity.vehicleDriver.Fleet;
 public interface FleetRepository extends JpaRepository<Fleet, Integer>{
 	
 	Optional<Fleet> findByRoute(@Param("route") String route);
+
+	List<Fleet> findByRouteIn(@Param("routes") List<String> route);
 	
 }

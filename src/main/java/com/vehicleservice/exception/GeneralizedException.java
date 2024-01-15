@@ -19,6 +19,7 @@ public class GeneralizedException extends RuntimeException {
 	private ErrorCode errorCode;
 	private LocalDateTime timestamp;
 	private HttpStatus httpStatus;
+	private String optionalDescription;
 
 	public GeneralizedException(String message, ErrorCode errorCode, HttpStatus httpStatus) {
 		super(message);
@@ -26,6 +27,22 @@ public class GeneralizedException extends RuntimeException {
 		this.errorCode = errorCode;
 		this.httpStatus = httpStatus;
 		this.timestamp = LocalDateTime.now();
+	}
+
+	public GeneralizedException(String message, ErrorCode errorCode, HttpStatus httpStatus, String optionalDescription) {
+		super(message);
+//		this.message = message;
+		this.errorCode = errorCode;
+		this.httpStatus = httpStatus;
+		this.timestamp = LocalDateTime.now();
+		this.optionalDescription = optionalDescription;
+	}
+
+	public GeneralizedException(GeneralizedException generalizedException, String optionalDescription) {
+		
+		this(generalizedException.getMessage(), generalizedException.getErrorCode(),
+				generalizedException.getHttpStatus(), optionalDescription);
+		
 	}
 	
 }

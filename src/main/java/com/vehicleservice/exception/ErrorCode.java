@@ -11,7 +11,8 @@ public enum ErrorCode {
 	TELEMETRY_RECORDS_NOT_FOUND(1006, "Telemetry records not found for this time range"),
 	FLEET_NOT_FOUND(1007, "Fleet with given route not found"),
 	INVALID_REQUEST(1008, "Invalid or missing request parameter"),
-	EMPLOYEE_NOT_FOUND(1009, "Employee with given employee ID not found");
+	EMPLOYEE_NOT_FOUND(1009, "Employee with given employee ID not found"),
+	FILE_DATA_PROCESSING_ERROR(1010, "Issue while processing file data");
 	
 	ErrorCode(int value, String reasonPhrase) {
 		this.value = value;

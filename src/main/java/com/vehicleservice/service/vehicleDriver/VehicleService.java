@@ -1,6 +1,10 @@
 package com.vehicleservice.service.vehicleDriver;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -14,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vehicleservice.constants.VehicleEnum;
@@ -23,6 +28,8 @@ import com.vehicleservice.entity.vehicleDriver.Vehicle;
 import com.vehicleservice.exception.ErrorCode;
 import com.vehicleservice.exception.GeneralizedException;
 import com.vehicleservice.exception.VehicleNotFoundException;
+import com.vehicleservice.helper.ExcelGenerator;
+import com.vehicleservice.helper.ExcelHelper;
 import com.vehicleservice.repository.vehicleDriver.FleetRepository;
 import com.vehicleservice.repository.vehicleDriver.VehicleRepository;
 import com.vehicleservice.request.VehicleMassUpdateRequest;
@@ -32,6 +39,7 @@ import com.vehicleservice.response.VehicleResponse;
 import com.vehicleservice.response.VehicleResponseList;
 import com.vehicleservice.response.VehicleResponseListSlice;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @Service
@@ -45,21 +53,33 @@ public class VehicleService {
 	
 	@Autowired
 	private Environment environment;
+	
+	@Autowired
+	ExcelHelper excelHelper;
 
-//	@Transactional
+	@Autowired
+	ExcelGenerator excelGenerator;
+
+//	@Transactional(propagation = Propagation.REQUIRED)
 //	public VehicleResponse addVehicle(VehicleRequest vehicleRequest) {
-//
+//		
+//		Optional<Vehicle> vehicleOptional = vehicleRepository.findByRegistrationNumber(vehicleRequest.getRegistrationNumber());
+//		
+//		if(vehicleOptional.isPresent())
+//			throw new GeneralizedException(ErrorCode.DUPLICATE_REGISTRATION_NUMBER.getReasonPhrase(),
+//					ErrorCode.DUPLICATE_REGISTRATION_NUMBER, HttpStatus.BAD_REQUEST);
+//		
 //		Vehicle vehicle = transformVehicleRequest(vehicleRequest);
 //		
 //		Fleet fleet = vehicle.getFleet();
 //		String route = fleet.getRoute();
 //		
-//		Fleet fleetByRoute = fleetRepository.findByRoute(route);
+//		Optional<Fleet> fleetByRoute = fleetRepository.findByRoute(route);
 //		
-//		if(fleetByRoute != null) {
+//		if(fleetByRoute.isPresent()) {
 //			
-//			fleetByRoute.setCount(fleetByRoute.getCount() + 1);
-//			Fleet updatedFleet = fleetRepository.saveAndFlush(fleetByRoute);
+//			fleetByRoute.get().setCount(fleetByRoute.get().getCount() + 1);
+//			Fleet updatedFleet = fleetRepository.saveAndFlush(fleetByRoute.get());
 //			vehicle.setFleet(updatedFleet);
 //		}else {
 //			fleet.setCount(1);
@@ -68,19 +88,13 @@ public class VehicleService {
 //			
 //		}
 //		
-////		Vehicle vehicle = new Vehicle();
-////		vehicle.setModel(vehicleRequest.getModel());
-////		vehicle.setRegistrationNumber(vehicleRequest.getRegistrationNumber());
-////		vehicle.setStyle(vehicleRequest.getStyle());
-////		vehicle.setFleetId(new fleet);
-//
 //		Vehicle savedVehicle = vehicleRepository.save(vehicle);
-//	
+//		
 //		return new VehicleResponse(savedVehicle);
-//
+//		
 //	}
 
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRED)
 	public VehicleResponse addVehicle(VehicleRequest vehicleRequest) {
 		
 		Optional<Vehicle> vehicleOptional = vehicleRepository.findByRegistrationNumber(vehicleRequest.getRegistrationNumber());
@@ -96,16 +110,21 @@ public class VehicleService {
 		
 		Optional<Fleet> fleetByRoute = fleetRepository.findByRoute(route);
 		
+		System.out.println(fleetByRoute.get().getRoute().equalsIgnoreCase("mumbai")
+				? " mumbai count: " + fleetByRoute.get().getCount()
+				: "not mumbai");
+		
 		if(fleetByRoute.isPresent()) {
 			
 			fleetByRoute.get().setCount(fleetByRoute.get().getCount() + 1);
-			Fleet updatedFleet = fleetRepository.saveAndFlush(fleetByRoute.get());
-			vehicle.setFleet(updatedFleet);
+//			Fleet updatedFleet = fleetRepository.saveAndFlush(fleetByRoute.get());
+//			vehicle.setFleet(updatedFleet);
+			vehicle.setFleet(fleetByRoute.get());
 		}else {
 			fleet.setCount(1);
-			Fleet updatedFleet = fleetRepository.save(fleet);
-			vehicle.setFleet(updatedFleet);
-			
+//			Fleet updatedFleet = fleetRepository.save(fleet);
+//			vehicle.setFleet(updatedFleet);
+//			vehicle.setFleet(fleet);
 		}
 		
 		Vehicle savedVehicle = vehicleRepository.save(vehicle);
@@ -116,15 +135,13 @@ public class VehicleService {
 	
 	private Vehicle transformVehicleRequest(VehicleRequest vehicleRequest) {
 		
-		Vehicle vehicle = new Vehicle();
+		Fleet fleet = Fleet.builder().id(0).count(0).route(vehicleRequest.getRoute().trim().toUpperCase()).build();
 		
-		vehicle.setFleet(new Fleet(0, 0, vehicleRequest.getRoute().toUpperCase()));
-		vehicle.setModel(vehicleRequest.getModel());
-		vehicle.setRegistrationNumber(vehicleRequest.getRegistrationNumber());
-		vehicle.setStyle(vehicleRequest.getStyle());
-		vehicle.setStatus(vehicleRequest.getStatus() != null ? VehicleStatus.of(vehicleRequest.getStatus()) : VehicleStatus.NEW);
-		
-//		vehicle.setStatus("NEW");
+		Vehicle vehicle = Vehicle.builder().fleet(fleet).model(vehicleRequest.getModel())
+				.registrationNumber(vehicleRequest.getRegistrationNumber()).style(vehicleRequest.getStyle())
+				.status(vehicleRequest.getStatus() != null ? VehicleStatus.of(vehicleRequest.getStatus())
+						: VehicleStatus.NEW)
+				.build();
 		
 		return vehicle;
 		
@@ -197,7 +214,7 @@ public class VehicleService {
 		
 	}
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED)
 	public boolean deleteVehicleById(Integer vehicleId) {
 		
 		Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
@@ -209,7 +226,7 @@ public class VehicleService {
 				
 				Integer fleetId = vehicle.getFleet().getId();
 				
-				reduceFleetCount(fleetId);
+				reduceFleetCountInDb(fleetId);
 				
 			}
 			vehicleRepository.deleteById(vehicleId);
@@ -223,7 +240,7 @@ public class VehicleService {
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRED)
-	private void reduceFleetCount(Integer fleetId) {
+	private void reduceFleetCountInDb(Integer fleetId) {
 		
 		Optional<Fleet> fleetOptional = fleetRepository.findById(fleetId);
 		
@@ -238,11 +255,27 @@ public class VehicleService {
 		}
 		
 	}
-	
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public VehicleResponse updateVehicle(VehicleRequest vehicleRequest) {
+
+	@Transactional(propagation = Propagation.REQUIRED)
+	private void reduceFleetCount(Integer fleetId, Vehicle vehicle) {
 		
-		Optional<Vehicle> vehicleOptional = vehicleRepository.findByRegistrationNumber(vehicleRequest.getRegistrationNumber());
+		Optional<Fleet> fleetOptional = fleetRepository.findById(fleetId);
+		
+		if(fleetOptional.isPresent()) {
+			
+			Fleet fleet = fleetOptional.get();
+			
+			fleet.setCount(fleet.getCount() - 1);
+			
+			vehicle.setFleet(fleet);
+			
+//			fleetRepository.save(fleet);
+			
+		}
+		
+	}
+	
+	public Vehicle updateVehicles(VehicleRequest vehicleRequest, Optional<Vehicle> vehicleOptional) {
 		
 		if(!vehicleOptional.isPresent())
 			throw new GeneralizedException(
@@ -276,7 +309,74 @@ public class VehicleService {
 			
 			if(existingFleet != null) {
 				
-				reduceFleetCount(existingFleet.getId());
+				reduceFleetCountInDb(existingFleet.getId());
+				
+				incrementFleetCount(vehicleRequest.getRoute(), vehicle);
+				
+			}else {
+				
+				incrementFleetCount(vehicleRequest.getRoute(), vehicle);
+			}
+			updateVehicle = true;
+		}
+		return vehicle;
+		
+	}
+	
+	public void updateVehicle(List<VehicleRequest> vehicleRequest) {
+		
+//		List<Vehicle> vehicleOptional = vehicleRepository.findByRegistrationNumber(List<getRegistrationNumber));
+//		
+//		for()
+		
+		
+	}
+	
+	
+	@Transactional(propagation = Propagation.REQUIRED)
+	public VehicleResponse updateVehicle(VehicleRequest vehicleRequest) {
+		
+		Optional<Vehicle> vehicleOptional = vehicleRepository.findByRegistrationNumber(vehicleRequest.getRegistrationNumber());
+
+		if (!vehicleOptional.isPresent())
+			throw new GeneralizedException(ErrorCode.VEHICLE_NOT_FOUND.getReasonPhrase(), ErrorCode.VEHICLE_NOT_FOUND,
+					HttpStatus.BAD_REQUEST,
+					" [ vehicle registration number: " + vehicleRequest.getRegistrationNumber() + " ]");
+		
+		vehicleRequest.setRoute(vehicleRequest.getRoute().toUpperCase().trim());
+		boolean updateVehicle = false;
+		Vehicle vehicle = vehicleOptional.get();
+		
+		if(vehicleRequest.getModel() != null && !vehicleRequest.getModel().equals(vehicle.getModel())) {
+			
+			vehicle.setModel(vehicleRequest.getModel());
+			updateVehicle = true;
+		}
+		if(vehicleRequest.getStyle() != null && !vehicleRequest.getStyle().equals(vehicle.getStyle())) {
+			
+			vehicle.setStyle(vehicleRequest.getStyle());
+			updateVehicle = true;
+		}
+		if (vehicleRequest.getStatus() != null
+				&& VehicleStatus.of(vehicleRequest.getStatus()).compareTo(vehicle.getStatus()) != 0) {
+			
+			vehicle.setStatus(VehicleStatus.of(vehicleRequest.getStatus()));
+			updateVehicle = true;
+		}
+		if (vehicleRequest.getRoute() != null
+				&& (vehicle.getFleet() == null || !vehicleRequest.getRoute().equalsIgnoreCase(vehicle.getFleet().getRoute()))) {
+			
+			Fleet existingFleet = vehicle.getFleet();
+			
+			if(existingFleet != null) {
+				
+				System.out.println("update opr");
+				System.out.println(existingFleet.getRoute().equalsIgnoreCase("mumbai")
+						? " mumbai count: " + existingFleet.getCount()
+						: "not mumbai");
+				
+				reduceFleetCountInDb(existingFleet.getId());
+//				reduceFleetCount(existingFleet.getId(), vehicle);
 				
 				incrementFleetCount(vehicleRequest.getRoute(), vehicle);
 				
@@ -304,16 +404,17 @@ public class VehicleService {
 		if(fleetByRoute.isPresent()) {
 			
 			fleetByRoute.get().setCount(fleetByRoute.get().getCount() + 1);
-			updatedFleet = fleetRepository.saveAndFlush(fleetByRoute.get());
+//			updatedFleet = fleetRepository.saveAndFlush(fleetByRoute.get());
+			vehicle.setFleet(fleetByRoute.get());
 
 		}else {
 			Fleet fleet = new Fleet();
 			fleet.setCount(1);
 			fleet.setRoute(route);
-			updatedFleet = fleetRepository.save(fleet);
-			
+//			updatedFleet = fleetRepository.save(fleet);
+			vehicle.setFleet(fleet);
 		}
-		vehicle.setFleet(updatedFleet);
+//		vehicle.setFleet(updatedFleet);
 	}
 
 	public Object getSpeedLimit() {
@@ -341,4 +442,174 @@ public class VehicleService {
 		
 	}
 
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public Object processVehiclesUsingFile(MultipartFile file) {
+		
+		System.out.println(file.getOriginalFilename());
+		System.out.println(file.getSize());
+		System.out.println(file.getContentType());
+		
+		try {
+			Map<String, List<Vehicle>> vehicles = excelHelper.excelToVehicles(file);
+			
+			List<Integer> vehicleIds = vehicles.get(VehicleEnum.DELETE).stream().map(v -> v.getId()).collect(Collectors.toList());
+			
+			deleteVehicles(vehicleIds);
+//			deleteAllVehicles(vehicles.get(VehicleEnum.DELETE));
+			
+			createVehicles(vehicles.get(VehicleEnum.CREATE));
+
+			updateVehicles(vehicles.get(VehicleEnum.UPDATE));
+			
+			return vehicles;
+
+		} catch (GeneralizedException e) {
+			
+			throw e;
+		}
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED)
+	private List<Integer> deleteVehicles(List<Integer> vehicleIds) {
+		
+		List<Integer> vehicleIdsDeleted = new ArrayList<>();
+		
+		for(Integer vehicleId: vehicleIds) {
+			
+			if(deleteVehicleById(vehicleId)) {
+				System.out.println("Deleted vehcileId: " + vehicleId);
+				vehicleIdsDeleted.add(vehicleId);
+				
+			} else {
+				System.out.println("Issue in deleting vehcileId: " + vehicleId);
+				throw new GeneralizedException(ErrorCode.VEHICLE_NOT_FOUND.getReasonPhrase(),
+						ErrorCode.VEHICLE_NOT_FOUND, HttpStatus.BAD_REQUEST, " [ vehicleId: " + vehicleId + " ]");
+			}
+		}
+		return vehicleIdsDeleted;
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED)
+	private List<String> createVehicles(List<Vehicle> vehicles) {
+		
+		List<String> vehiclesCreated = new ArrayList<>();
+		
+		List<VehicleRequest> vehicleRequests = vehicles.stream().map(v -> new VehicleRequest(v.getFleet().getRoute(),
+				v.getRegistrationNumber(), v.getModel(), v.getStyle(), v.getStatus().getStatusCode()))
+				.collect(Collectors.toList());
+		
+		for(VehicleRequest vehicleRequest : vehicleRequests) {
+			
+			try {
+				VehicleResponse vehicleResponse = addVehicle(vehicleRequest);
+				
+				vehiclesCreated.add(vehicleResponse.getRegistrationNumber());
+				
+				
+			} catch (GeneralizedException e) {
+				System.out.println("Issue in creating vehcile with registration number: " + vehicleRequest.getRegistrationNumber());
+				throw new GeneralizedException(e, " [ vehicle registration number: " + vehicleRequest.getRegistrationNumber() + " ]");
+			}
+			
+		}
+		
+		return vehiclesCreated;
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED)
+	private List<String> updateVehicles(List<Vehicle> vehicles) {
+		
+		List<String> vehiclesModified = new ArrayList<>();
+		
+		List<VehicleRequest> vehicleRequests = vehicles.stream().map(v -> new VehicleRequest(v.getFleet().getRoute(),
+				v.getRegistrationNumber(), v.getModel(), v.getStyle(), v.getStatus().getStatusCode()))
+				.collect(Collectors.toList());
+		
+		for(VehicleRequest vehicleRequest : vehicleRequests) {
+			
+			try {
+				VehicleResponse vehicleResponse = updateVehicle(vehicleRequest);
+				
+				vehiclesModified.add(vehicleResponse.getRegistrationNumber());
+				
+			} catch (GeneralizedException e) {
+				System.out.println("Issue in modifying vehcile with registration number: " + vehicleRequest.getRegistrationNumber());
+				throw e;
+			}
+			
+		}
+		
+		return vehiclesModified;
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED)
+	private void deleteAllVehicles(List<Vehicle> vehicles) {
+		
+		List<Integer> vehicleIds = vehicles.stream().map(v -> v.getId()).collect(Collectors.toList());
+		
+		List<Vehicle> vehicleEntities = vehicleRepository.findAllById(vehicleIds);
+		
+		Map<String, List<Vehicle>> routeVehicleMap = vehicleEntities.stream()
+				.collect(Collectors.groupingBy(v -> v.getFleet().getRoute()));
+		
+//		for(Map.Entry<String, List<Vehicle>> entry : routeVehicleMap.entrySet()) {
+//			
+//			
+//			
+//			
+//		}
+		
+		Map<String, Fleet> updatedFleet = calculateFleetCountAfterDeletion(routeVehicleMap);
+		
+		fleetRepository.saveAll(updatedFleet.values());
+		
+		vehicleRepository.deleteAllById(vehicleIds);
+		
+		
+		
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED)
+	private Map<String, Fleet> calculateFleetCountAfterDeletion(Map<String, List<Vehicle>> routeVehicleMap){
+		
+		List<String> routeList = routeVehicleMap.keySet().stream().collect(Collectors.toList());
+		
+		List<Fleet> listOfFleet = fleetRepository.findByRouteIn(routeList);
+		
+		Map<String, Fleet> updatedFleet = new HashMap<>();
+		
+		for(Fleet fleet : listOfFleet) {
+			
+			int updatedCount = fleet.getCount() - routeVehicleMap.get(fleet.getRoute()).size();
+			
+			if(updatedCount < 0)
+				updatedCount = 0;
+
+			fleet.setCount(updatedCount);
+			
+			updatedFleet.put(fleet.getRoute(), fleet);
+		}
+		return updatedFleet;
+		
+	}
+	
+	private void saveAllVehicles(Map<String, Fleet> updatedFleet) {
+		
+		
+		
+	}
+
+	public void downloadVehicleData(HttpServletResponse response) throws IOException {
+		
+		VehicleResponseList vehicleResponseList = getAllVehicles(0);
+		List<VehicleResponse> vehicleList = vehicleResponseList.getVehicleList();
+		
+		String sheetName = environment.getProperty(VehicleEnum.VEHICLE_EXCEL_SHEET_NAME, "VehicleList");
+		String fileName = environment.getProperty(VehicleEnum.VEHICLE_EXCEL_FILE_NAME, "VehicleData");
+		
+		excelGenerator.exportToExcel(response, vehicleList, fileName, sheetName,
+				VehicleEnum.VEHICLE_EXCEL_COLUMN_DOWNLOAD);
+		
+		
+	}
 }

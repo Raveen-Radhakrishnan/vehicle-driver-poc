@@ -75,9 +75,11 @@ public class ExceptionControllerAdvice {
 
 	@ExceptionHandler(GeneralizedException.class)
 	public final ResponseEntity<ErrorDetails> handleGeneralizedException(GeneralizedException ex) throws Exception {
-		
-		ErrorDetails errorDetails = new ErrorDetails(ex.getTimestamp(), 
-				ex.getErrorCode().getReasonPhrase(), ex.getErrorCode(), ex.getErrorCode().getValue());
+
+		ErrorDetails errorDetails = new ErrorDetails(ex.getTimestamp(),
+				ex.getOptionalDescription() != null ? ex.getErrorCode().getReasonPhrase() + ex.getOptionalDescription()
+						: ex.getErrorCode().getReasonPhrase(),
+				ex.getErrorCode(), ex.getErrorCode().getValue());
 		
 		return new ResponseEntity<ErrorDetails>(errorDetails, ex.getHttpStatus());
 		

@@ -1,9 +1,9 @@
 INSERT INTO fleet (count, route)
 VALUES (1, 'PUNE'),
 (3, 'MUMBAI'),
-(2, 'KOCHI'),
+(3, 'KOCHI'),
 (1, 'KOLKATA'),
-(2, 'DELHI'),
+(1, 'DELHI'),
 (1, 'BANGALORE'),
 (1, 'KASHMIR');
 
